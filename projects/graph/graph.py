@@ -39,7 +39,7 @@ class Graph:
         """
 
         #  --- Using QUEUE -----
-        visited = []
+        visited = set()
         queue = Queue()
         queue.enqueue(starting_vertex)
 
@@ -47,7 +47,7 @@ class Graph:
             vertex = queue.dequeue()
             # print(vertex)
             if vertex not in visited:
-                visited.append(vertex)
+                visited.add(vertex)
                 for neighbor in self.get_neighbors(vertex):
                     queue.enqueue(neighbor)
         return visited
