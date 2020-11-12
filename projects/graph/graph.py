@@ -1,7 +1,8 @@
 """
-Simple graph implementation TO DO
+Simple graph implementation 
 """
 from util import Stack, Queue  # These may come in handy
+from collections import deque
 
 class Graph:
 
@@ -13,33 +14,78 @@ class Graph:
         """
         Add a vertex to the graph.
         """
-        pass  # TODO
-
+        self.vertices[vertex_id] = set()
+       
     def add_edge(self, v1, v2):
         """
         Add a directed edge to the graph.
         """
-        pass  # TODO
+        if v1 not in self.vertices:
+            nv = self.add_vertex(v1)
+        if v2 not in self.vertices:
+            nv = self.add_vertex(v2)
+        self.vertices[v1].add(v2)
 
     def get_neighbors(self, vertex_id):
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+
+        #  --- Using QUEUE -----
+        visited = []
+        queue = Queue()
+        queue.enqueue(starting_vertex)
+
+        while queue.size() > 0:
+            vertex = queue.dequeue()
+            # print(vertex)
+            if vertex not in visited:
+                visited.append(vertex)
+                for neighbor in self.get_neighbors(vertex):
+                    queue.enqueue(neighbor)
+        return visited
+
+        # ------- Using DEQUE -----
+
+        # visited = set()
+        # queue = deque()
+        # queue.append(starting_vertex)
+        # while len(queue) > 0:
+        #     currNode = queue.popleft()
+        #     if currNode not in visited:
+        #         visited.add(currNode)
+        #         # print(currNode)
+        #         for neighbor in self.get_neighbors(currNode):
+        #             queue.append(neighbor)
+        # return visited
+
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        #  --- Using QUEUE -----
+        visited = []
+        stack = Stack()
+        stack.push(starting_vertex)
+
+        while stack.size() > 0:
+            vertex = stack.pop()
+            # print(vertex)
+            if vertex not in visited:
+                visited.append(vertex)
+                for neighbor in self.get_neighbors(vertex):
+                    # print(neighbor)
+                    stack.push(neighbor)
+        return visited
 
     def dft_recursive(self, starting_vertex):
         """
@@ -102,7 +148,7 @@ if __name__ == '__main__':
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     '''
     print(graph.vertices)
-
+    print(graph.get_neighbors(4))
     '''
     Valid BFT paths:
         1, 2, 3, 4, 5, 6, 7
@@ -118,7 +164,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
-    graph.bft(1)
+    print(graph.bft(1))
 
     '''
     Valid DFT paths:
@@ -127,7 +173,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
-    graph.dft(1)
+    print(graph.dft(1))
     graph.dft_recursive(1)
 
     '''
