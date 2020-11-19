@@ -50,7 +50,7 @@ class Graph:
                 visited.add(vertex)
                 for neighbor in self.get_neighbors(vertex):
                     queue.enqueue(neighbor)
-        return visited
+        # return visited
 
         # ------- Using DEQUE -----
 
@@ -72,8 +72,9 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        #  --- Using QUEUE -----
-        visited = []
+        #  --- Using STACk -----
+        # visited = []
+        visited = set()
         stack = Stack()
         stack.push(starting_vertex)
 
@@ -81,11 +82,11 @@ class Graph:
             vertex = stack.pop()
             # print(vertex)
             if vertex not in visited:
-                visited.append(vertex)
+                visited.add(vertex)
                 for neighbor in self.get_neighbors(vertex):
                     # print(neighbor)
                     stack.push(neighbor)
-        return visited
+        # return visited
 
     def dft_recursive(self, starting_vertex):
         """
@@ -94,7 +95,29 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        visited = {}
+        # init visited hashtable to false for all verts
+        for i in self.vertices:
+            visited[i] = False
+
+        def recurse(vert_id, visited):
+            # traversal operation
+            print(vert_id)
+            # mark as visited
+            visited[vert_id] = True
+
+            # base case = everything has been visited already
+            if False not in visited.values():
+                return
+            else:
+                for neighbor in self.get_neighbors(vert_id):
+                    # only recurse for unvisited verts
+                    if visited[neighbor] == False:
+                        recurse(neighbor, visited)
+
+        # initial recursive call
+        recurse(starting_vertex, visited)  
+
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -102,7 +125,33 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+         # Create an empty queue and enqueue A PATH TO the starting vertex ID
+        q = Queue()
+        q.enqueue([starting_vertex])
+		# Create a Set to store visited vertices
+        visited = set()
+		# While the queue is not empty...
+        while q.size() > 0:
+			# Dequeue the first PATH
+            path = q.dequeue()
+			# Grab the last vertex from the PATH
+            lastvertex = path[-1]
+			# If that vertex has not been visited...
+            if lastvertex not in visited:
+				# CHECK IF IT'S THE TARGET
+                if lastvertex == destination_vertex:
+				  # IF SO, RETURN PATH
+                  return path
+				# Mark it as visited...
+                visited.add(lastvertex)
+				# Then add A PATH TO its neighbors to the back of the queue
+                for neighbor in self.get_neighbors(lastvertex):
+				  # COPY THE PATH
+                  copied_path = [*path]
+				  # APPEND THE NEIGHOR TO THE BACK
+                  copied_path.append(neighbor)
+                  # Add list back inside queue
+                  q.enqueue(copied_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -110,7 +159,25 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        s = Stack()
+        s.push([starting_vertex])
+
+        visited = set()
+
+        while s.size() > 0:
+            path = s.pop()
+            lastvertex = path[-1]
+
+            if lastvertex not in visited:
+                if lastvertex == destination_vertex:
+                    return path
+
+                visited.add(lastvertex)
+
+                for neighbor in self.get_neighbors(lastvertex):
+                    copied_path = [*path]
+                    copied_path.append(neighbor)
+                    s.push(copied_path)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
