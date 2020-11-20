@@ -1,7 +1,4 @@
-
-# def earliest_ancestor(ancestors, starting_node):
-#     pass
-# BFS - use queue
+''' BFS - use queue'''
 class Queue():
     def __init__(self):
         self.queue = []
@@ -15,39 +12,20 @@ class Queue():
     def size(self):
         return len(self.queue)
 
-# BFS pseudo
-# BFS(graph, startVert):
-#   for v of graph.vertexes:
-#     v.color = white
-
-#   startVert.color = gray
-#   queue.enqueue(startVert)
-
-#   while !queue.isEmpty():
-#     u = queue[0]  // Peek at head of queue, but do not dequeue!
-
-#     for v of u.neighbors:
-#       if v.color == white:
-#         v.color = gray
-#         queue.enqueue(v)
-    
-#     queue.dequeue()
-#     u.color = black
-
 def earliest_ancestor(ancestors, starting_node):
     
     q = Queue()
-    # add first vertexId to path set 
+    # add first vertex to path list
     path = [starting_node]
     q.enqueue(path)
-
-    # while we have vertecies in the q
+    # print(f'path: {path}')
+    # loop while we have vertices in the q
     while q.size() > 0:
         
         current_path = q.dequeue()
         new_path = []
         changed = False
-
+        # print( f'current_path: {current_path}')
         # get begin vertexId/vertex of path        
         for vertexId in current_path:
             # loop through ancestors for parents            

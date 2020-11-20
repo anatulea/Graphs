@@ -1,3 +1,6 @@
+import random
+from collections import deque
+import time
 class Queue():
     def __init__(self):
         self.queue = []
@@ -41,6 +44,14 @@ class SocialGraph:
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
 
+
+    def fisher_yates_shuffle(self, l):
+        for i in range(0, len(l)):
+            random_index = random.randint(i, len(l) - 1)
+            l[random_index], l[i] = l[i], l[random_index]
+
+
+
     def populate_graph(self, num_users, avg_friendships):
         """
         Takes a number of users and an average number of friendships
@@ -58,8 +69,25 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
-
+        for user in range(num_users):
+            self.add_user(user)
+        
         # Create friendships
+        total_friendships = avg_friendships * num_users
+
+        friendship_combos = []
+
+        for user_id in range(1, num_users+1):
+            for friend_id in range(user_id+1, num_users+1):
+                friendship_combos.append((user_id, friend_id))
+        
+        self.fisher_yates_shuffle(friendship_combos)
+
+        friendships_to_make = friendship_combos[:(total_friendships//2)]
+
+        for friendship in friendships_to_make:
+            self.add_friendship(friendship[0], friendship[1])
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -94,7 +122,7 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
-    print(sg.friendships)
+    sg.populate_graph(100, 2)
+    print(f'sg.friendships: {sg.friendships}')
     connections = sg.get_all_social_paths(1)
-    print(connections)
+    print(f'connections: {connections}')
