@@ -5,20 +5,18 @@ from world import World
 import random
 from ast import literal_eval
 
-class Stack():
+class Queue():
     def __init__(self):
-        self.stack = []
-    def push(self, value):
-        self.stack.append(value)
-    def pop(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
         if self.size() > 0:
-            return self.stack.pop()
+            return self.queue.pop(0)
         else:
             return None
-    def get(self):
-        return self.stack
     def size(self):
-        return len(self.stack)
+        return len(self.queue)
 
 # Load world
 world = World()
@@ -58,17 +56,17 @@ traversal_path = []
 # Store the possible direstions for each room
 traversal_graph = dict() 
 
-# Will implement DFT so will use a stack to keep track of the room navigation path
-stack = Stack()
+# Will implement DFT so will use a queue to keep track of the room navigation path
+queue = Queue()
+# Push the first room into the queue 
+queue.enqueue([player.current_room]) 
 
-# Push the first room into the stack 
-stack.push([player.current_room]) 
 
-# Loop while there are still rooms into the stack
-while stack.size() > 0:
+# Loop while there are still rooms into the queue
+while queue.size() > 0:
 
-    # Extract the last added room from the stack
-    path = stack.pop()
+    # Extract the last added room from the queue
+    path = queue.dequeue()
     # print(f'path[-1]: {path[-1]}')
 
     # Take the last room from the path and explore it 
@@ -107,9 +105,9 @@ while stack.size() > 0:
                 # Create a copy of the path and add to it the next room to it
                 new_path = [*path, next_room]
 
-                # Add the new path to the stack to be explored. 
-                stack.push(new_path)
+                # Add the new path to the queue to be explored. 
 
+                queue.enqueue(new_path)
             # Else if there is no neighbor room
             else:
                 # Change the rest of the '?' in the traversal_graph to be None
